@@ -21,6 +21,16 @@ const Careers = () => {
     const toast = useToast()
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if(user.usertype==="ADMIN"){
+            toast({
+                title: 'ERROR',
+                description:"You are trying to change an ADMIN to driver",
+                status: 'error',
+                duration: 9000,
+                isClosable: true,
+            })
+            return
+        }
         const response = await axios.post(`${BACKEND_ENDPOINT}careerpost`, formData, { headers: { 'Content-Type': 'application/json' } });
         if (response.status === 201) {
             toast({
