@@ -85,7 +85,6 @@ const SignIn = () => {
   // SignIn ENd
 
   const handlePhoneNumberChange = (number) => {
-    console.log(number);
     setsignUpFormData({ ...signUpFormData, phone: number });
     setShowForm(true);
   };
