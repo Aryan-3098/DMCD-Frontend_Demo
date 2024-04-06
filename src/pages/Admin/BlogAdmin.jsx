@@ -64,7 +64,7 @@ const BlogAdmin = () => {
                                     <BlogItem blog={blog} />
                                 </Link>
                             ))}
-                            <Box className=''><button className=' text-blue-900 ml-6' href="#">See All Posts..</button></Box>
+                            <Link to="/allblogs">See All Posts..</Link>
                         </Box>
         
                         <Box className='flex justify-center items-center fixed bottom-24 w-full'>
