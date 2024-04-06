@@ -42,10 +42,8 @@ const Header = ({ user }) => {
                     <DrawerContent >
                         <DrawerCloseButton />
                         <DrawerHeader>
-                            <Box>{user._id}</Box>
                             <Box>{user.name}</Box>
                             <Box>{user.email}</Box>
-                            <Box>{user.usertype}</Box>
                         </DrawerHeader>
 
                         <DrawerBody className='flex justify-center items-center flex-col bg-transparent'>

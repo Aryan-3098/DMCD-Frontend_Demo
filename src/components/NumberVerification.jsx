@@ -34,7 +34,7 @@ const NumberVerification = ({ onPhoneNumberChange }) => {
                 setFormState({ ...formState, phoneNumberError: 'Phone number must be exactly 10 digits' });
                 return;
             }
-            const response = await axios.get(`${BACKEND_ENDPOINT}generateOTP`);
+            const response = await axios.post(`${BACKEND_ENDPOINT}generateOTP`,{phone : phoneNumber});
             if (response.status === 200) {
                 toast({
                     title: 'OTP Sent',

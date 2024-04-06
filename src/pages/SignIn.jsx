@@ -19,6 +19,7 @@ import {
   RadioGroup,
   Radio,
   Stack,
+  Progress,
 } from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
@@ -57,6 +58,7 @@ const SignIn = () => {
   const [signinEmail, setSigninEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const[loading,setLoading]=useState(false);
 
   const handleEmailChange = (event) => setSigninEmail(event.target.value);
   const handlePasswordChange = (event) => setPassword(event.target.value);
@@ -64,8 +66,8 @@ const SignIn = () => {
   const handleClick = () => setShowPassword(!showPassword);
 
   const handleSignIn = () => {
-    axios
-      .post(`${BACKEND_ENDPOINT}signin`, {
+    setLoading(true)
+    axios.post(`${BACKEND_ENDPOINT}signin`, {
         email: signinEmail,
         password,
       })
@@ -76,10 +78,12 @@ const SignIn = () => {
           navigate("/home");
           localStorage.setItem("userID", response.data.responseUser._id);
           dispatch(setUser(response.data.responseUser));
+          setLoading(false)
         }
       })
       .catch((error) => {
         console.error("Sign in failed:", error);
+        setLoading(false)
       });
   };
   // SignIn ENd
@@ -182,6 +186,7 @@ const SignIn = () => {
   else{
   return (
     <Box className="h-full flex justify-center items-center flex-col bg-primary">
+      {loading?<Progress isIndeterminate style={{height:"7px"}} className="w-full "/>:""}
       <Box
         className="bg-white p-4 rounded-lg shadow-xl mt-10"
         height={500}

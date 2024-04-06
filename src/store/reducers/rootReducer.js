@@ -1,11 +1,17 @@
-// store/reducers/index.js
-
 import { combineReducers } from 'redux';
 import userReducer from './userReducer';
+const loadingReducer = (state = false, action) => {
+  switch (action.type) {
+    case 'SET_USER_LOADING':
+      return action.payload;
+    default:
+      return state;
+  }
+};
 
-// Combine all reducers into a single root reducer
 const rootReducer = combineReducers({
-    user: userReducer,
+  user: userReducer,
+  userLoading: loadingReducer,
 });
 
 export default rootReducer;

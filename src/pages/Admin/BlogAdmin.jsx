@@ -11,6 +11,7 @@ import "slick-carousel/slick/slick-theme.css";
 import "../../assets/slick-custom.css"
 import Carousel from '../../components/Carousel';
 import { BACKEND_ENDPOINT } from '../../constants';
+import BlogsLoadingSkeleton from '../../components/Loading/BlogsLoadingSkeleton';
 
 const BlogAdmin = () => {
     const user = useSelector(state => state.user.user);
@@ -48,36 +49,39 @@ const BlogAdmin = () => {
     //     slidesToShow: 3,
     //     slidesToScroll: 3
     // };
+  
     return (
         <>
-            <Box className="pt-20 h-full">
-                <Box className='flex justify-center mb-14'>
-                    <Carousel blogs={blogs} />
-                </Box>
-                <Box className='font-bold text-xl ml-6 shadow-sm'>Recent Posts</Box>
-                <Box className='overflow-y-scroll mb-24' style={{ height: "calc(100% - 190px)" }}>
-                    {blogs.map((blog) => (
-                        <Link to={`/blog/${blog._id}`} key={blog._id}>
-                            <BlogItem blog={blog} />
-                        </Link>
-                    ))}
-                    <Box className=''><button className=' text-blue-900 ml-6' href="#">See All Posts..</button></Box>
-                </Box>
-
-                <Box className='flex justify-center items-center fixed bottom-24 w-full'>
-                    <Button onClick={onOpen} className='bg-white'>Add <AddIcon pl={1} w={4} h={4} /></Button>
-                </Box>
-                <Modal isOpen={isOpen} onClose={onClose}>
-                    <ModalOverlay />
-                    <ModalContent>
-                        <ModalHeader className='bg-accentsGY rounded-2xl'>Add a Blog</ModalHeader>
-                        <ModalCloseButton />
-                        <ModalBody className='bg-accentsGY rounded-2xl' onClose={onClose}>
-                            <PostBlogModal />
-                        </ModalBody>
-                    </ModalContent>
-                </Modal>
-            </Box>
+        {loading?<BlogsLoadingSkeleton/>:
+                        <Box className="pt-20 h-full">
+                        <Box className='flex justify-center mb-14'>
+                            <Carousel blogs={blogs} />
+                        </Box>
+                        <Box className='font-bold text-xl ml-6 shadow-sm'>Recent Posts</Box>
+                        <Box className='overflow-y-scroll mb-24' style={{ height: "calc(100% - 190px)" }}>
+                            {blogs.map((blog) => (
+                                <Link to={`/blog/${blog._id}`} key={blog._id}>
+                                    <BlogItem blog={blog} />
+                                </Link>
+                            ))}
+                            <Box className=''><button className=' text-blue-900 ml-6' href="#">See All Posts..</button></Box>
+                        </Box>
+        
+                        <Box className='flex justify-center items-center fixed bottom-24 w-full'>
+                            <Button onClick={onOpen} className='bg-white'>Add <AddIcon pl={1} w={4} h={4} /></Button>
+                        </Box>
+                        <Modal isOpen={isOpen} onClose={onClose}>
+                            <ModalOverlay />
+                            <ModalContent>
+                                <ModalHeader className='bg-accentsGY rounded-2xl'>Add a Blog</ModalHeader>
+                                <ModalCloseButton />
+                                <ModalBody className='bg-accentsGY rounded-2xl' onClose={onClose}>
+                                    <PostBlogModal />
+                                </ModalBody>
+                            </ModalContent>
+                        </Modal>
+                    </Box>
+        }
         </>
     );
 }

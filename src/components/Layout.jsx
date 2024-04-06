@@ -8,11 +8,14 @@ import { jwtDecode } from 'jwt-decode';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserData } from '../helper/fetchUser.js';
 import { setUser } from '../store/actions/userActions.js';
+import HomeLoadingSkeleton from "./Loading/HomeLoadingSkeleton.jsx";
+
 
 const Layout = ({ children }) => {
     const dispatch = useDispatch()
     const navigate = useNavigate();
     let user = useSelector(state => state.user)
+    let userLoading=useSelector(state => state.userLoading)
     const location = useLocation();
     const token = Cookies.get('token');
     useEffect(() => {
@@ -36,7 +39,12 @@ const Layout = ({ children }) => {
         verifyToken();
     }, [navigate]);
     if (token) {
-        if (user && user !== null && user.user && user.user !== null) {
+        if(userLoading){
+            return (
+                <HomeLoadingSkeleton/>
+            )
+        }
+        else if (user && user !== null && user.user && user.user !== null) {
             return (
                 <Box>
                     <Header user={user.user} />
@@ -51,8 +59,8 @@ const Layout = ({ children }) => {
             if (userID && userID != null) {
                 (async () => {
                     try {
-                        const NEW = await fetchUserData(userID);
-                        dispatch(setUser(NEW))
+                        const userData = await fetchUserData(userID);
+                        dispatch(setUser(userData))
                     } catch (error) {
                         console.error('Error fetching or processing user data:', error);
                     }
