@@ -27,7 +27,7 @@ const Header = ({ user }) => {
 
 
     return (
-        <Box className={`fixed flex justify-center items-center w-full ${location.pathname.includes("careers")?'bg-white':''}`} style={{ height: "80px" }}>
+        <Box className={`fixed flex justify-center items-center z-10 w-full ${location.pathname.includes("careers")||location.pathname.includes("dashboard/analytics")?'bg-white':''}`} style={{ height: "80px" }}>
             <Box className={`absolute ${location.pathname.includes('/home') ? 'right-3' : 'left-3'}`} >
                 <Button id='menuBtn' style={{ color: location.pathname.includes("/home") ? "white" : "black", background: "transparent" }} ref={btnRef} onClick={onOpen}>
                     <HamburgerIcon w={8} h={8} />

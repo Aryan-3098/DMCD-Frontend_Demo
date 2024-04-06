@@ -72,7 +72,7 @@ const City = () => {
 
   return (
     <div id="chart">
-      <ReactApexChart options={chartData.options} series={chartData.series} type="bar" height={location.pathname.includes("ageGenderChart")?500:300} width={location.pathname.includes("ageGenderChart")?900:300} />
+      <ReactApexChart options={chartData.options} series={chartData.series} type="bar" height={location.pathname.includes("cityChart")?500:300} width={location.pathname.includes("cityChart")?900:300} />
     </div>
   );
 };

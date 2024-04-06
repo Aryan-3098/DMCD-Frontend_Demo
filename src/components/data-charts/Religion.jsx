@@ -60,7 +60,7 @@ const Religion = () => {
 
   return (
     <div id="chart">
-      <ReactApexChart options={chartData.options} series={chartData.series} height={location.pathname.includes("ageGenderChart")?500:300} width={location.pathname.includes("ageGenderChart")?900:300} type="polarArea" />
+      <ReactApexChart options={chartData.options} series={chartData.series} height={location.pathname.includes("religionChart")?500:300} width={location.pathname.includes("religionChart")?900:300} type="polarArea" />
     </div>
   );
 };

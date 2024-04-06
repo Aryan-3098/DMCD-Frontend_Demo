@@ -12,10 +12,10 @@ const Analytics = () => {
         <>
             {
                 user.usertype === "ADMIN" ? (
-                    <Box className='pt-10 lg:h-full xl:h-full 2xl:h-full lg:grid xl:grid 2xl:grid justify-center items-center w-full grid-cols-3 flex flex-col overflow-x-scroll md:px-10' style={{height:"100dvh"}}>
-                        <Box className='col-span-1 md:'><Link to="/dashboard/analytics/religionChart"><Religion/></Link></Box>
-                        <Box className='col-span-1 md:'><Link to="/dashboard/analytics/cityChart"><City/></Link></Box>
-                        <Box className='col-span-1 md:'><Link to="/dashboard/analytics/ageGenderChart"><AgeGender/></Link></Box>
+                    <Box className='pt-96 lg:pt-0 xl:pt-0 2xl:pt-0 lg:h-full xl:h-full 2xl:h-full lg:grid xl:grid 2xl:grid justify-center items-center w-full grid-cols-3 flex flex-col overflow-x-scroll md:px-10' style={{height:"100dvh"}}>
+                        <Box className='col-span-1 '><Link to="/dashboard/analytics/religionChart"><Religion/></Link></Box>
+                        <Box className='col-span-1 '><Link to="/dashboard/analytics/cityChart"><City/></Link></Box>
+                        <Box className='col-span-1 '><Link to="/dashboard/analytics/ageGenderChart"><AgeGender/></Link></Box>
                     </Box>
                 ) : (
                     <Box>This Page is only accessible to admin</Box>
