@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { Box, Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Text, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, useDisclosure, useToast } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
 import BlogItem from '../../components/BlogItem';
 import PostBlogModal from '../../components/modals/PostBLogModal';
@@ -14,11 +14,11 @@ import { BACKEND_ENDPOINT } from '../../constants';
 import BlogsLoadingSkeleton from '../../components/Loading/BlogsLoadingSkeleton';
 
 const BlogAdmin = () => {
-    const user = useSelector(state => state.user.user);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(false);
-
+    const userLoggedIn=useSelector(state=>state.userLoggedIn)
+    const toast=useToast()
     useEffect(() => {
         fetchBlogs();
     },[]);
@@ -35,20 +35,20 @@ const BlogAdmin = () => {
         }
     };
 
+    const handleAddButtonClick = () => {
+        if (userLoggedIn) {
+            onOpen();
+        } else {
+            toast({
+                title: 'SignIn',
+                description: "You need to signin to use this.",
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+              });
+        }
+    };
 
-
-    // useEffect(() => {
-    //     window.addEventListener('scroll', handleScroll);
-    //     return () => window.removeEventListener('scroll', handleScroll);
-    // }, []);
-
-    // const settings = {
-    //     dots: true,
-    //     infinite: true,
-    //     speed: 500,
-    //     slidesToShow: 3,
-    //     slidesToScroll: 3
-    // };
   
     return (
         <>
@@ -68,7 +68,7 @@ const BlogAdmin = () => {
                         </Box>
         
                         <Box className='flex justify-center items-center fixed bottom-24 w-full'>
-                            <Button onClick={onOpen} className='bg-white'>Add <AddIcon pl={1} w={4} h={4} /></Button>
+                        <Button onClick={handleAddButtonClick} className='bg-white'>Add <AddIcon pl={1} w={4} h={4} /></Button>
                         </Box>
                         <Modal isOpen={isOpen} onClose={onClose}>
                             <ModalOverlay />

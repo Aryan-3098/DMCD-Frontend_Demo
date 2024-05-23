@@ -1,16 +1,18 @@
-import { Box, Skeleton, Text, VStack } from "@chakra-ui/react";
+import { Box, Skeleton, Text, VStack, useToast } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import bg from "../assets/images/HD-wallpaper-night-riders-bmw-car-cars-city-cyberpunk-furious-lights-old-traffic.jpg";
 import { BACKEND_ENDPOINT } from "../constants";
 import HomeLoadingSkeleton from "../components/Loading/HomeLoadingSkeleton";
+import { useSelector } from "react-redux";
 
 const Home = () => {
   const [backgroundImage, setBackgroundImage] = useState("");
   const [homeTitle, setHomeTitle] = useState("");
   const [homeText, setHomeText] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const toast=useToast()
+  let userLoggedIn = useSelector(state => state.userLoggedIn)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,6 +31,19 @@ const Home = () => {
     fetchData();
   }, []);
 
+  const handleBooking = () => {
+    if (userLoggedIn) {
+      window.open("https://api.whatsapp.com/send?phone=+918877607375&text=Hello%20I%20want%20to%20book%20a%20driver", "_blank");
+    } else {
+      toast({
+        title: 'SignIn',
+        description: "You need to signin to use this.",
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
   return (
     <>
       {isLoading ? (
@@ -60,15 +75,9 @@ const Home = () => {
             </Text>
             <Box className=" mt-0 mb-2 col-span-1">
               <Box className="text-green-500">
-                <Link
-                  to="https://api.whatsapp.com/send?phone=+917546910766&text=Hello%20I%20want%20to%20book%20a%20driver"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <button className="border-2 rounded-full py-3 px-10 mt-4">
+                  <button className="border-2 rounded-full py-3 px-10 mt-4" onClick={()=>handleBooking()}>
                     Book Now
                   </button>
-                </Link>
               </Box>
               <div className="text-white mt-2 pl-3">Available in Jamshedpur</div>
             </Box>
