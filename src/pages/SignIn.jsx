@@ -29,8 +29,9 @@ import logo from "../assets/images/DMCD-logos_transparent.png";
 import NumberVerification from "../components/NumberVerification";
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
-import { setUser } from "../store/actions/userActions";
+import { setUser, setUserLoggedIn } from "../store/actions/userActions";
 import { BACKEND_ENDPOINT } from "../constants";
+import { jwtDecode } from "jwt-decode";
 
 const SignIn = () => {
   const dispatch = useDispatch();
@@ -38,6 +39,7 @@ const SignIn = () => {
   const toast = useToast();
 
   const userID = localStorage.getItem("userID");
+  const token = Cookies.get('token');
 
   // const clearOut = (() => {
   //     if (localStorage) {
@@ -59,6 +61,7 @@ const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [nullOtp, setNullOtp] = useState(false);
+  const [tabIndex, setTabIndex] = useState(0);
 
   const handleEmailChange = (event) => setSigninEmail(event.target.value);
   const handlePasswordChange = (event) => setPassword(event.target.value);
@@ -76,14 +79,21 @@ const SignIn = () => {
         if (response.status === 200) {
           const { token } = response.data;
           Cookies.set("token", token, { expires: 5 });
-          navigate("/home");
           localStorage.setItem("userID", response.data.responseUser._id);
           dispatch(setUser(response.data.responseUser));
+          dispatch(setUserLoggedIn(true))
           setLoading(false);
+          navigate("/home")
         }
       })
       .catch((error) => {
-        console.error("Sign in failed:", error);
+        toast({
+          title: "Error",
+          description: error.response.data.error || "Error",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
         setLoading(false);
       });
   };
@@ -128,6 +138,11 @@ const SignIn = () => {
       formErrors.email = "Email is required";
     } else if (!/^\S+@\S+$/.test(signUpFormData.email.trim())) {
       formErrors.email = "Invalid email format";
+    }
+    if (!signUpFormData.phone.trim()) {
+      formErrors.phone = "Phone number is required";
+    } else if (!/^\d{10}$/.test(signUpFormData.phone.trim())) {
+      formErrors.phone = "Phone number must be 10 digits";
     }
     if (!signUpFormData.password.trim()) {
       formErrors.password = "Password is required";
@@ -197,8 +212,27 @@ const SignIn = () => {
     }
   };
 
-  const [tabIndex, setTabIndex] = useState(0);
 
+    useEffect(() => {
+        const verifyToken = () => {
+            if (token) {
+                try {
+                    const decodedToken = jwtDecode(token);
+                    const currentTime = Date.now() / 1000;
+                    if (decodedToken.exp < currentTime) {
+                        navigate('/signin-signup');
+                    }
+                } catch (error) {
+                    console.error('Error decoding token:', error);
+                    navigate('/signin-signup');
+                }
+            } else {
+                navigate('/signin-signup');
+            }
+        };
+
+        verifyToken();
+    },[]);
   useEffect(() => {
     if (userID && userID !== null) {
       navigate("/home");
@@ -295,14 +329,15 @@ const SignIn = () => {
                   </FormControl>
                 </TabPanel>
                 <TabPanel style={{ overflowY: "auto", maxHeight: "300px" }}>
-                  <Box display={!showForm ? "block" : "none"}>
+                  {/* <Box display={!showForm ? "block" : "none"}>
                     <NumberVerification
                       onPhoneNumberChange={handlePhoneNumberChange}
                       nullOtp={nullOtp}
                       setNullOtp={setNullOtp}
                     />
-                  </Box>
-                  <Box display={showForm ? "block" : "none"}>
+                  </Box> */}
+                  {/* <Box display={showForm ? "block" : "none"}> */}
+                  <Box>
                     <form onSubmit={handleSignUp}>
                       <FormControl isInvalid={errors.name}>
                         <Input
@@ -332,7 +367,7 @@ const SignIn = () => {
                       <FormControl mt={4}>
                         <Input
                           type="tel"
-                          readOnly
+                          // readOnly
                           name="phone"
                           value={signUpFormData.phone}
                           onChange={handleChange}

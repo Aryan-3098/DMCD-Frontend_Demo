@@ -1,7 +1,6 @@
 import axios from 'axios';
-import { SET_USER, CLEAR_USER, UPDATE_USER,SET_USER_LOADING } from './actionTypes';
+import { SET_USER, CLEAR_USER, UPDATE_USER,SET_USER_LOADING, SET_USER_LOGGED_IN } from './actionTypes';
 import { BACKEND_ENDPOINT } from '../../constants';
-import { type } from '@testing-library/user-event/dist/type';
 
 export const setUser = (userData) => ({
     type: SET_USER,
@@ -20,6 +19,11 @@ export const updateUser = (userData) => ({
 export const setUserLoading = (loading) =>({
     type:SET_USER_LOADING,
     payload: loading
+})
+
+export const setUserLoggedIn = (loggedIn) =>({
+    type:SET_USER_LOGGED_IN,
+    payload: loggedIn
 })
 
 

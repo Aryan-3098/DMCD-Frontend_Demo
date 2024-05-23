@@ -1,18 +1,17 @@
 import { Box, Button, FormControl, Image, Input, Text, VStack, useToast } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import taxi from '../assets/images/taxi.png'
 import { useSelector } from 'react-redux'
 import axios from 'axios'
 import { BACKEND_ENDPOINT } from '../constants'
+import {WarningTwoIcon} from '@chakra-ui/icons'
+import { Link } from 'react-router-dom'
 
 const Careers = () => {
-
     let user = useSelector(state => state.user.user)
-    const [formData, setFormData] = useState({
-        name: user.name,
-        phone: user.phone,
-    });
-
+    const userLoggedIn=useSelector(state=>state.userLoggedIn)
+    const [formData, setFormData] = useState({ name: '', phone: '' });
+    
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -26,7 +25,7 @@ const Careers = () => {
                 title: 'ERROR',
                 description:"You are trying to change an ADMIN to driver",
                 status: 'error',
-                duration: 9000,
+                duration: 5000,
                 isClosable: true,
             })
             return
@@ -41,8 +40,18 @@ const Careers = () => {
             })
         }
     };
+    useEffect(() => {
+        if (user) {
+            setFormData({
+                name: user.name,
+                phone: user.phone,
+            });
+        }
+    }, [user]);
 
+    
     return (
+        userLoggedIn?
         <Box className='overflow-y-scroll pt-20 h-full'>
             <Box className='flex justify-center'>
                 <Image src={taxi} style={{height:"250px"}} />
@@ -66,6 +75,11 @@ const Careers = () => {
                     </VStack>
                 </form>
             )}
+        </Box>:
+        <Box className='h-full pt-20 grid justify-center items-center grid-rows-2'>
+        <Box className='row-span-1 h-full flex justify-center items-end'><WarningTwoIcon style={{color:"red",height:"25%",width:"25%"}} /></Box>
+        <Box className='row-span-1 h-full flex justify-center items-start'> <Text className='text-2xl'>You need to <Link className='font-bold text-seconday underline' to="/signin-signup">SignIn</Link> first</Text></Box>
+
         </Box>
     );
 }

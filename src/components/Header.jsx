@@ -1,15 +1,16 @@
 import { Button, Drawer, DrawerBody, Text, DrawerCloseButton, DrawerContent, DrawerOverlay, useDisclosure, Box, DrawerFooter, DrawerHeader } from '@chakra-ui/react'
 import { HamburgerIcon } from '@chakra-ui/icons'
 import React, { useRef } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import Cookies from 'js-cookie'
-import { clearUser } from '../store/actions/userActions'
+import { clearUser, setUserLoggedIn } from '../store/actions/userActions'
 
-const Header = ({ user }) => {
+const Header = () => {
     const dispath = useDispatch()
     const location = useLocation()
     const navigate = useNavigate()
+    const user=useSelector(state=>state.user.user)
     const { isOpen, onOpen, onClose } = useDisclosure()
     const btnRef = useRef()
     const handleNavigate = (route) => {
@@ -22,9 +23,8 @@ const Header = ({ user }) => {
         localStorage.clear();
         localStorage.clear()
         dispath(clearUser());
-        navigate("/signin-signup")
+        dispath(setUserLoggedIn(false))
     }
-
 
     return (
         <Box className={`fixed flex justify-center items-center z-10 w-full ${location.pathname.includes("careers")||location.pathname.includes("dashboard/analytics")?'bg-white':''}`} style={{ height: "80px" }}>
@@ -42,8 +42,8 @@ const Header = ({ user }) => {
                     <DrawerContent >
                         <DrawerCloseButton />
                         <DrawerHeader>
-                            <Box>{user.name}</Box>
-                            <Box>{user.email}</Box>
+                            <Box>{user?user.name:""}</Box>
+                            <Box>{user?user.email:""}</Box>
                         </DrawerHeader>
 
                         <DrawerBody className='flex justify-center items-center flex-col bg-transparent'>
@@ -64,7 +64,13 @@ const Header = ({ user }) => {
                             </Button> : ""}
                         </DrawerBody>
                         <DrawerFooter>
-                            <Button colorScheme='red' onClick={() => handleLogOut()}>Log Out</Button>
+                            <Box>
+                                { 
+                                    user&&user!==null&&user!==undefined
+                                    ? <Button colorScheme='red' onClick={() => handleLogOut()}>Log Out</Button>
+                                    : <Button><Link to="/signin-signup">Sign In</Link></Button>
+                                }
+                            </Box>
                         </DrawerFooter>
                     </DrawerContent>
                 </Drawer>

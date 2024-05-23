@@ -9,6 +9,15 @@ const loadingReducer = (state = false, action) => {
   }
 };
 
+const loggedInReducer = (state = false, action) =>{
+  switch (action.type) {
+    case 'SET_USER_LOGGED_IN':
+      return action.payload
+      default:
+        return state
+  }
+}
+
 const rootReducer = combineReducers({
   user: userReducer,
   userLoading: loadingReducer,
